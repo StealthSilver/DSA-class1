@@ -1,0 +1,136 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Time &amp; Space Complexity · Lecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070912;--ink:#eef0ff;--ink2:#c3c8e6;--mute:#8a90b2;--dim:#4d5273;--hair:rgba(255,255,255,.09);--acc:#8b7cff;--mint:#3ddc97;--gold:#ffc857;--red:#ff6b81;--sans:"Sora","Helvetica Neue",Arial,sans-serif;--mono:"JetBrains Mono",ui-monospace,Menlo,monospace;--out:cubic-bezier(.16,1,.3,1)}
+@media(prefers-color-scheme:light){:root{--bg:#070912}}
+*{box-sizing:border-box;margin:0;padding:0}html,body{height:100%;background:var(--bg);color:var(--ink);overflow:hidden;font-family:var(--sans);-webkit-font-smoothing:antialiased}
+#bg{position:fixed;inset:0}#stage{position:fixed;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transform:translateX(60px);transition:opacity .6s,transform .8s var(--out),visibility .6s}
+.slide.active{opacity:1;visibility:visible;transform:none}.slide.past{transform:translateX(-60px)}
+.hdr{position:absolute;top:60px;left:150px;right:150px;display:flex;justify-content:space-between;font:600 15px var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}.hdr b{color:var(--acc)}
+.title{position:absolute;left:150px;right:150px;top:112px;font-size:70px;font-weight:800;letter-spacing:-.035em;line-height:1.08}
+.area{position:absolute;left:150px;right:150px;top:262px;bottom:100px}
+.acc{color:var(--acc)}.mint{color:var(--mint)}.gold{color:var(--gold)}.red{color:var(--red)}.mut{color:var(--mute)}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .8s var(--out),transform 1s var(--out);transition-delay:var(--d,0s)}.active .rv{opacity:1;transform:none}
+.g{display:grid;gap:24px;height:100%}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:repeat(3,1fr)}.c5{grid-template-columns:repeat(5,1fr)}
+.p{background:rgba(18,21,42,.78);border:1px solid var(--hair);border-radius:14px;padding:28px 32px;display:flex;flex-direction:column;backdrop-filter:blur(10px)}
+.p.hl{border-color:rgba(139,124,255,.55);background:linear-gradient(180deg,rgba(139,124,255,.14),rgba(18,21,42,.8))}
+.k{font:600 15px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+.h{font-size:32px;font-weight:700;letter-spacing:-.02em;line-height:1.2}.t{font-size:24px;line-height:1.5;color:var(--ink2)}.t b,.h b{color:var(--ink)}
+.big{font-size:104px;font-weight:800;letter-spacing:-.05em;line-height:.95;color:var(--acc)}.mt{margin-top:auto}.m1{margin-top:14px}.m2{margin-top:26px}
+.mono{font-family:var(--mono)}ul.l{list-style:none}ul.l li{padding:13px 0 13px 34px;position:relative;font-size:24px;line-height:1.4;color:var(--ink2);border-top:1px solid var(--hair)}ul.l li:first-child{border:0}ul.l li:before{content:"";position:absolute;left:4px;top:24px;width:9px;height:9px;border:2px solid var(--acc);border-radius:50%}ul.l b{color:var(--ink)}
+.ic{font:.88em var(--mono);color:var(--gold);background:rgba(255,200,87,.1);padding:1px 8px;border-radius:5px}
+table.tb{width:100%;border-collapse:collapse;font-size:22px}.tb th{font:500 14px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mute);text-align:left;padding:10px 14px;border-bottom:1px solid var(--hair)}.tb td{padding:11px 14px;border-bottom:1px solid var(--hair);color:var(--ink2)}.tb td:first-child{font:600 21px var(--mono);color:var(--ink)}
+.code{background:rgba(9,11,24,.92);padding:0;overflow:hidden}.code .bar{padding:13px 22px;border-bottom:1px solid var(--hair);font:13px var(--mono);color:var(--mute);letter-spacing:.08em}
+pre{font:21px/1.55 var(--mono);padding:22px 28px;color:#e6e8fa;white-space:pre}.ck{color:#ff8fa3}.cn{color:#8fd3ff}.cc{color:#6a7096;font-style:italic}.cs{color:#ffd98a}
+.s0{position:absolute;left:150px;top:230px;right:150px}.tag{display:inline-block;border:1.5px solid var(--ink2);padding:12px 22px;font:600 17px var(--mono);letter-spacing:.28em;text-transform:uppercase}
+.hero{margin-top:50px;font-size:136px;font-weight:800;letter-spacing:-.05em;line-height:1}.meta{margin-top:56px;display:flex;gap:44px;font:22px var(--mono);color:var(--ink2)}
+.uline{position:absolute;left:150px;top:940px;width:620px;height:3px;background:var(--acc)}
+.st{opacity:0;transform:translateY(20px);transition:all .7s var(--out);pointer-events:none}.st.on{opacity:1;transform:none}
+.qa{display:grid}.qa>*{grid-area:1/1}
+.chip{display:inline-block;font:600 17px var(--mono);padding:6px 14px;border-radius:99px;border:1px solid var(--hair);color:var(--ink2)}
+#bar{position:fixed;left:0;right:0;bottom:0;height:52px;display:flex;align-items:center;gap:18px;padding:0 22px;font:12px var(--mono);letter-spacing:.12em;color:var(--mute)}
+#prog{flex:1;display:flex;gap:3px}#prog i{flex:1;height:3px;background:#1e2240;border-radius:2px;cursor:pointer}#prog i.d{background:#4d5273}#prog i.on{background:var(--acc)}
+#bar button{background:rgba(18,21,42,.8);border:1px solid var(--hair);color:var(--ink2);height:30px;padding:0 12px;border-radius:5px;cursor:pointer;font:inherit}
+</style></head><body><canvas id="bg"></canvas><div id="stage">
+
+<section class="slide"><div class="s0"><span class="tag rv">DSA · Lecture · Analysis of Algorithms</span><h1 class="hero rv" style="--d:.15s">Time &amp; Space<br><span class="acc">Complexity.</span></h1><div class="meta rv" style="--d:.3s"><span>O · Ω · Θ</span><span>Growth order</span><span>10 C++ questions</span></div></div><div class="uline"></div></section>
+
+<section class="slide"><div class="hdr"><span><b>01</b> · Why analyse</span><span>Count steps, not seconds</span></div><h2 class="title rv">Measure <span class="acc">growth</span>, not the clock</h2>
+<div class="area"><div class="g c3"><div class="p rv" style="--d:.1s"><div class="k">Problem</div><div class="h m1">Seconds depend on hardware, language and compiler.</div></div><div class="p hl rv" style="--d:.2s"><div class="k">Idea</div><div class="h m1">Count <b class="acc">basic operations</b> as a function of input size <span class="ic">n</span>.</div></div><div class="p rv" style="--d:.3s"><div class="k">Goal</div><div class="h m1">How does the work <b class="acc">grow</b> when n grows? That is what Big O captures.</div></div></div></div></section>
+
+<section class="slide"><div class="hdr"><span><b>02</b> · Notations</span><span>Compare f(n) with g(n)</span></div><h2 class="title rv">Five notations, <span class="acc">five symbols</span></h2>
+<div class="area"><div class="g c5" style="height:430px">
+<div class="p hl rv" style="--d:.1s"><div class="k">Big-O</div><div class="big">O</div><div class="h mt">Upper bound <span class="mut">≤</span></div><div class="t m1" style="font-size:20px">f ≤ c·g for n ≥ n₀</div></div>
+<div class="p rv" style="--d:.17s"><div class="k">Omega</div><div class="big" style="color:var(--mint)">Ω</div><div class="h mt">Lower bound <span class="mut">≥</span></div><div class="t m1" style="font-size:20px">f ≥ c·g for n ≥ n₀</div></div>
+<div class="p rv" style="--d:.24s"><div class="k">Theta</div><div class="big" style="color:var(--gold)">Θ</div><div class="h mt">Tight bound <span class="mut">=</span></div><div class="t m1" style="font-size:20px">c₁·g ≤ f ≤ c₂·g</div></div>
+<div class="p rv" style="--d:.31s"><div class="k">Little-o</div><div class="big" style="color:var(--ink2)">o</div><div class="h mt">Strictly smaller <span class="mut">&lt;</span></div><div class="t m1" style="font-size:20px">n = o(n²)</div></div>
+<div class="p rv" style="--d:.38s"><div class="k">Little-omega</div><div class="big" style="color:var(--ink2)">ω</div><div class="h mt">Strictly larger <span class="mut">&gt;</span></div><div class="t m1" style="font-size:20px">n² = ω(n)</div></div></div>
+<div class="t rv" style="--d:.5s;margin-top:34px">Θ holds exactly when <b>f = O(g)</b> <b>and</b> <b>f = Ω(g)</b>. Always give the <b class="acc">tightest</b> bound.</div></div></section>
+
+<section class="slide"><div class="hdr"><span><b>03</b> · Proving it</span><span>Limit test + worked example</span></div><h2 class="title rv">Limit test: <span class="acc">L = lim f(n)/g(n)</span></h2>
+<div class="area"><div class="g c2"><div class="p rv" style="--d:.1s"><table class="tb"><tr><th>L</th><th>Conclusion</th></tr><tr><td>L = 0</td><td>f = <b class="acc">o(g)</b>, so also O</td></tr><tr><td>0 &lt; L &lt; ∞</td><td>f = <b class="gold">Θ(g)</b></td></tr><tr><td>L = ∞</td><td>f = <b class="mint">ω(g)</b>, so also Ω</td></tr></table></div>
+<div class="p hl rv" style="--d:.2s"><div class="k">Worked example · f(n) = 3n² + 5n + 2</div><ul class="l m1"><li>O(n²): for n ≥ 1, f ≤ 3n²+5n²+2n² = <b>10n²</b></li><li>Ω(n²): f ≥ <b>3n²</b></li><li>Both hold → <b class="gold">Θ(n²)</b></li><li>It is also O(n³), but that is a <b>loose</b> bound</li></ul></div></div></div></section>
+
+<section class="slide"><div class="hdr"><span><b>04</b> · Cases</span><span>Common misconception</span></div><h2 class="title rv">Best, worst, average <span class="acc">≠ O, Ω, Θ</span></h2>
+<div class="area"><div class="g c3" style="height:340px"><div class="p rv" style="--d:.1s"><div class="k">Best case</div><div class="big mint" style="font-size:90px;color:var(--mint)">Θ(1)</div><div class="t mt">Key at index 0</div></div><div class="p rv" style="--d:.2s"><div class="k">Worst case</div><div class="big" style="font-size:90px;color:var(--red)">Θ(n)</div><div class="t mt">Key last or absent</div></div><div class="p rv" style="--d:.3s"><div class="k">Average case</div><div class="big" style="font-size:90px;color:var(--gold)">Θ(n)</div><div class="t mt">About n/2 comparisons</div></div></div>
+<div class="p hl rv" style="--d:.45s;margin-top:28px"><div class="t"><b>Linear search</b> is O(n) and Ω(1) overall. Cases choose <b>which input</b> you analyse; the notations say <b>how you bound</b> the result. Any notation fits any case. Quick sort: best/avg Θ(n log n), worst Θ(n²).</div></div></div></section>
+
+<section class="slide"><div class="hdr"><span><b>05</b> · Growth order</span><span>Best (fastest) → worst</span></div><h2 class="title rv">The ladder of <span class="acc">growth</span></h2>
+<div class="area" style="top:240px"><div class="p rv" style="padding:10px 22px"><table class="tb" style="font-size:20px"><tr><th>#</th><th>Class</th><th>Name</th><th>Example</th></tr>
+<tr><td>1</td><td class="mint">O(1)</td><td>Constant</td><td>Array index, stack push</td></tr><tr><td>2</td><td>O(log log n)</td><td>Double-log</td><td>Interpolation search</td></tr><tr><td>3</td><td>O(log n)</td><td>Logarithmic</td><td>Binary search</td></tr><tr><td>4</td><td>O(√n)</td><td>Square-root</td><td>Trial-division primality</td></tr><tr><td>5</td><td>O(n)</td><td>Linear</td><td>Linear search, max</td></tr><tr><td>6</td><td>O(n log n)</td><td>Linearithmic</td><td>Merge sort, heap sort</td></tr><tr><td>7</td><td class="gold">O(n²)</td><td>Quadratic</td><td>Bubble, insertion sort</td></tr><tr><td>8</td><td>O(n³)</td><td>Cubic</td><td>Naive matrix multiply</td></tr><tr><td>9</td><td class="red">O(2ⁿ)</td><td>Exponential</td><td>Subsets, naive Fibonacci</td></tr><tr><td>10</td><td class="red">O(n!)</td><td>Factorial</td><td>Permutations, brute-force TSP</td></tr><tr><td>11</td><td class="red">O(nⁿ)</td><td>Super-exponential</td><td>Rare brute force</td></tr></table></div>
+<div class="mono rv" style="--d:.3s;margin-top:18px;font-size:19px;color:var(--ink2)">1 &lt; log log n &lt; log n &lt; √n &lt; n &lt; n log n &lt; n² &lt; n³ &lt; 2ⁿ &lt; n! &lt; nⁿ</div></div></section>
+
+<section class="slide"><div class="hdr"><span><b>06</b> · Counting</span><span>Rules + C++ examples</span></div><h2 class="title rv">Seven rules to <span class="acc">count steps</span></h2>
+<div class="area" style="top:240px"><div class="g" style="grid-template-columns:.9fr 1.1fr"><div class="p rv" style="--d:.1s"><ul class="l" style="font-size:22px"><li><b>Drop constants:</b> 5n → n</li><li><b>Keep the dominant term:</b> n²+n+100 → n²</li><li><b>Sequential blocks add</b>, nested loops <b>multiply</b></li><li><b>Halving or doubling</b> a variable → log n</li><li><b>Different inputs, different letters:</b> O(a·b)</li><li><b>Recursion:</b> write T(n), then solve it</li></ul></div>
+<div class="p code rv" style="--d:.2s"><div class="bar">examples.cpp</div><pre id="ex">for (int i = 0; i < n; i++) sum += i;          // O(n)
+
+for (int i = 0; i < n; i++)
+  for (int j = 0; j < i; j++) cnt++;           // O(n²): 1+2+..+n
+
+for (int i = 1; i < n; i *= 2) cnt++;          // O(log n)
+
+for (int i = 0; i < n; i++)
+  for (int j = 1; j < n; j *= 2) cnt++;        // O(n log n)
+
+// T(n) = 2T(n/2) + n  →  O(n log n)  (Master Theorem)</pre></div></div></div></section>
+
+<section class="slide"><div class="hdr"><span><b>07</b> · Space</span><span>Input space + auxiliary space</span></div><h2 class="title rv">Space <span class="acc">complexity</span></h2>
+<div class="area" style="top:240px"><div class="g" style="grid-template-columns:.85fr 1.15fr"><div class="p rv" style="--d:.1s"><div class="k">Total space =</div><div class="h m1">input + <span class="acc">auxiliary</span></div><ul class="l m2" style="font-size:22px"><li>Variables: O(1)</li><li>Arrays, maps, DP tables</li><li><b>Recursion stack:</b> depth × frame</li><li>“Space” usually means auxiliary</li></ul></div>
+<div class="p rv" style="--d:.2s;padding:10px 22px"><table class="tb" style="font-size:20px"><tr><th>Algorithm</th><th>Time</th><th>Aux space</th></tr><tr><td>Bubble / insertion</td><td>O(n²)</td><td class="mint">O(1)</td></tr><tr><td>Heap sort</td><td>O(n log n)</td><td class="mint">O(1)</td></tr><tr><td>Merge sort</td><td>O(n log n)</td><td class="gold">O(n)</td></tr><tr><td>Quick sort</td><td>avg n log n</td><td>O(log n) avg</td></tr><tr><td>Binary search (iter / rec)</td><td>O(log n)</td><td>O(1) / O(log n)</td></tr><tr><td>BFS / DFS</td><td>O(V+E)</td><td>O(V)</td></tr><tr><td>Fibonacci rec / iter</td><td>O(2ⁿ) / O(n)</td><td>O(n) / O(1)</td></tr></table></div></div></div></section>
+
+<section class="slide"><div class="hdr"><span><b>08</b> · Trade-off</span><span>Buy speed with memory</span></div><h2 class="title rv">Time–space <span class="acc">trade-off</span></h2>
+<div class="area" style="top:240px"><div class="g c2" style="height:300px"><div class="p rv" style="--d:.1s"><div class="k">Detect duplicates · nested loops</div><div class="big red m1" style="font-size:72px;color:var(--gold)">O(n²) time</div><div class="h mt">O(1) space</div></div><div class="p hl rv" style="--d:.2s"><div class="k">Detect duplicates · hash set</div><div class="big m1" style="font-size:72px;color:var(--mint)">O(n) time</div><div class="h mt">O(n) space</div></div></div>
+<div class="p rv" style="--d:.35s;margin-top:26px"><ul class="l" style="font-size:22px"><li>Fibonacci with memoisation: O(2ⁿ) → <b>O(n)</b> time, but O(n) space</li><li>An O(n) algorithm with a huge constant can lose to O(n²) on small inputs</li><li>Analyse time <b>and</b> space; never forget the <b>recursion stack</b></li></ul></div></div></section>
+
+<section class="slide"><div class="hdr"><span><b>09</b> · Quiz</span><span>10 questions · easy → hard</span></div><div class="s0" style="top:300px"><div class="tag rv">Your turn</div><h2 class="hero rv" style="--d:.1s;font-size:120px">10 snippets.<br><span class="acc">Time complexity?</span></h2><div class="meta rv" style="--d:.25s"><span>Read the code</span><span>Say your answer</span><span>Press → to reveal</span></div></div></section>
+<!--Q-->
+<section class="slide"><div class="s0" style="top:330px"><h2 class="hero" style="font-size:150px">Questions<span class="acc">?</span></h2><div class="meta"><span>O(1) &lt; log n &lt; n &lt; n log n &lt; n² &lt; 2ⁿ</span></div></div></section>
+</div>
+<div id="bar"><span id="cn">01</span><div id="prog"></div><button id="pv">←</button><button id="nx">→</button></div>
+<script>
+const Q=[["Easy","int sum = 0;\nfor (int i = 0; i < n; i++)\n    sum += i;","O(n)","One loop runs n times."],
+["Easy","for (int i = 0; i < n; i++)\n    for (int j = 0; j < n; j++)\n        cnt++;","O(n²)","Nested loops multiply: n × n."],
+["Easy","for (int i = 1; i < n; i *= 2)\n    cnt++;","O(log n)","i doubles, so about log₂n iterations."],
+["Medium","for (int i = 0; i < n; i++) a++;\nfor (int i = 0; i < n; i++)\n    for (int j = 0; j < n; j++) b++;","O(n²)","Sequential blocks add: n + n² → keep n²."],
+["Medium","for (int i = 0; i < n; i++)\n    for (int j = 0; j < i; j++)\n        cnt++;","O(n²)","0+1+…+(n−1) = n(n−1)/2, still Θ(n²)."],
+["Medium","for (int i = 0; i < n; i++)\n    for (int j = 1; j < n; j *= 2)\n        cnt++;","O(n log n)","n outer × log n inner."],
+["Hard","for (int i = n; i > 0; i /= 2)\n    for (int j = 0; j < i; j++)\n        cnt++;","O(n)","n + n/2 + n/4 + … = 2n. Not n log n!"],
+["Hard","int fib(int n) {\n    if (n <= 1) return n;\n    return fib(n-1) + fib(n-2);\n}   // time? (space is O(n) stack)","O(2ⁿ)","Each call spawns two; the tree has ~2ⁿ nodes."],
+["Hard","vector<int> v;\nfor (int i = 0; i < n; i++)\n    v.insert(v.begin(), i);","O(n²)","Each front insert shifts i elements: 0+1+…+n."],
+["Boss","for (long long i = 2; i < n; i = i * i)\n    cnt++;","O(log log n)","i: 2, 4, 16, 256… squares each time, so log₂log₂n steps."]];
+const E=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const hl=c=>c.replace(/(\/\/.*)|(\b(?:int|for|void|if|return|long|vector)\b)|(\b\d+\b)|([\s\S])/g,(m,a,b,d,e)=>a?`<span class="cc">${E(a)}</span>`:b?`<span class="ck">${b}</span>`:d?`<span class="cn">${d}</span>`:E(m));
+document.querySelectorAll("#ex").forEach(p=>p.innerHTML=hl(p.textContent));
+const col={Easy:"var(--mint)",Medium:"var(--gold)",Hard:"var(--red)",Boss:"var(--acc)"};
+document.querySelector("body").insertAdjacentHTML("beforeend","");
+const html=Q.map((q,i)=>`<section class="slide" data-steps="2"><div class="hdr"><span><b>Q${i+1}</b> / 10</span><span style="color:${col[q[0]]}">${q[0]}</span></div><h2 class="title rv">What is the <span class="acc">time complexity?</span></h2><div class="area"><div class="g" style="grid-template-columns:1.15fr .85fr"><div class="p code rv"><div class="bar">q${i+1}.cpp</div><pre style="font-size:25px">${hl(q[1])}</pre></div><div class="p qa" style="justify-content:center"><div class="st on" data-o="0" style="text-align:center;align-self:center"><div class="big" style="font-size:200px;color:var(--dim)">?</div><div class="t m1">Think. Say it out loud.<br><span class="mut">Press → to reveal</span></div></div><div class="st" data-o="1" style="align-self:center"><div class="k">Answer</div><div class="big m1" style="font-size:96px;color:${col[q[0]]}">${q[2]}</div><div class="t m2">${q[3]}</div></div></div></div></div></section>`).join("");
+const sl0=[...document.querySelectorAll(".slide")];
+sl0[9].insertAdjacentHTML("afterend",html);
+const S=[...document.querySelectorAll(".slide")],ST=[];
+S.forEach((s,i)=>{for(let t=0;t<(+s.dataset.steps||1);t++)ST.push([i,t])});
+const pr=document.getElementById("prog");pr.innerHTML=ST.map((_,i)=>`<i data-i="${i}"></i>`).join("");
+let step=0;
+function go(n){step=Math.max(0,Math.min(ST.length-1,n));const[si,t]=ST[step];
+S.forEach((s,i)=>{s.classList.toggle("active",i===si);s.classList.toggle("past",i<si)});
+S[si].querySelectorAll("[data-o]").forEach(e=>e.classList.toggle("on",+e.dataset.o===t));
+[...pr.children].forEach((b,i)=>{b.className=i===step?"on":i<step?"d":""});
+document.getElementById("cn").textContent=String(si+1).padStart(2,"0")+" / "+S.length;history.replaceState(null,"","#"+(step+1))}
+pr.onclick=e=>{if(e.target.dataset.i)go(+e.target.dataset.i)};
+nx.onclick=()=>go(step+1);pv.onclick=()=>go(step-1);
+addEventListener("keydown",e=>{if(["ArrowRight","ArrowDown"," ","PageDown","Enter"].includes(e.key)){e.preventDefault();go(step+1)}else if(["ArrowLeft","ArrowUp","PageUp","Backspace"].includes(e.key)){e.preventDefault();go(step-1)}else if(e.key==="f")document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()});
+let tx=null;addEventListener("touchstart",e=>tx=e.touches[0].clientX);addEventListener("touchend",e=>{if(tx==null)return;const d=e.changedTouches[0].clientX-tx;if(Math.abs(d)>50)go(step+(d<0?1:-1));tx=null});
+const st=document.getElementById("stage");
+function rs(){const s=Math.min(innerWidth/1920,innerHeight/1080);st.style.transform=`translate(${(innerWidth-1920*s)/2}px,${(innerHeight-1080*s)/2}px) scale(${s})`;cv.width=innerWidth;cv.height=innerHeight}
+const cv=document.getElementById("bg"),cx=cv.getContext("2d");addEventListener("resize",rs);rs();
+const cols=["139,124,255","61,220,151","255,200,87","255,107,129","195,200,230"];
+function fr(t){t/=1000;const W=cv.width,H=cv.height;cx.clearRect(0,0,W,H);
+cx.strokeStyle="rgba(139,124,255,.05)";cx.lineWidth=1;for(let x=0;x<W;x+=80){cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,H);cx.stroke()}
+for(let y=0;y<H;y+=80){cx.beginPath();cx.moveTo(0,y);cx.lineTo(W,y);cx.stroke()}
+for(let j=0;j<5;j++){const p=1+j*.9+.25*Math.sin(t*.4+j);cx.strokeStyle=`rgba(${cols[j]},.16)`;cx.lineWidth=2;cx.beginPath();
+for(let i=0;i<=80;i++){const u=i/80,x=u*W,y=H-Math.pow(u,p)*H*.95;i?cx.lineTo(x,y):cx.moveTo(x,y)}cx.stroke();
+const u=(t*.07+j*.2)%1,x=u*W,y=H-Math.pow(u,p)*H*.95;cx.fillStyle=`rgba(${cols[j]},.7)`;cx.beginPath();cx.arc(x,y,5,0,7);cx.fill()}
+const g=cx.createRadialGradient(W*.5,H*.4,H*.2,W*.5,H*.4,H);g.addColorStop(0,"rgba(7,9,18,0)");g.addColorStop(1,"rgba(7,9,18,.7)");cx.fillStyle=g;cx.fillRect(0,0,W,H);requestAnimationFrame(fr)}
+requestAnimationFrame(fr);
+go(Math.max(0,(parseInt(location.hash.slice(1))||1)-1));
+</script></body></html>
